@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional styles to match the provided template */
+        body {
+            background: #4070f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .navbar {
+            background: #4070f4;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+            top: -224px;
+            right: 210px;
+            
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: 500;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .wrapper {
+            position: relative;
+            max-width: 430px;
+            width: 100%;
+            background: #fff;
+            padding: 34px;
+            border-radius: 6px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .wrapper h2 {
+            position: relative;
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .wrapper h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 3px;
+            width: 28px;
+            border-radius: 12px;
+            background: #4070f4;
+        }
+
+        .wrapper form {
+            margin-top: 30px;
+        }
+
+        .wrapper form .input-box {
+            height: 52px;
+            margin: 18px 0;
+        }
+
+        form .input-box input {
+            height: 100%;
+            width: 100%;
+            outline: none;
+            padding: 0 15px;
+            font-size: 17px;
+            font-weight: 400;
+            color: #333;
+            border: 1.5px solid #C7BEBE;
+            border-bottom-width: 2.5px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .input-box input:focus,
+        .input-box input:valid {
+            border-color: #4070f4;
+        }
+
+        form .policy {
+            display: flex;
+            align-items: center;
+        }
+
+        form h3 {
+            color: #707070;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .input-box.button input {
+            color: #fff;
+            letter-spacing: 1px;
+            border: none;
+            background: #4070f4;
+            cursor: pointer;
+        }
+
+        .input-box.button input:hover {
+            background: #0e4bf1;
+        }
+
+        form .text h3 {
+            color: #333;
+            width: 100%;
+            text-align: center;
+        }
+
+        form .text h3 a {
+            color: #4070f4;
+            text-decoration: none;
+        }
+
+        form .text h3 a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" style="font-size: larger;">Home</a>
+        <a href="/login" style="font-size: larger;">Login</a>
+    </nav>
+
+    <div class="wrapper">
+        <h2>Registration</h2>
+        {{!-- <form action="/register" method="POST">
+            <div class="input-box">
+                <input type="text" placeholder="Enter your name" name ="name" required>
+            </div>
+            <div class="input-box">
+                <input type="text" placeholder="Enter your email" name ="email" required>
+            </div>
+            <div class="input-box">
+                <input type="text" placeholder="Create password" name ="password" required>
+            </div>
+            <div class="input-box">
+                <input type="password" placeholder="Confirm password" name ="confirmpassword" required>
+            </div>
+           
+            <div class="input-box button">
+                <input type="Submit" value="Register Now">
+            </div>
+            <div class="text">
+                <h3>Already have an account? <a href="/login">Login now</a></h3>
+            </div>
+        </form> --}}
+         <form action="/register" method="POST" onsubmit="return validateForm()">
+        <div class="input-box">
+            <input type="text" placeholder="Enter your name" name="name" required>
+        </div>
+        <div class="input-box">
+            <input type="text" placeholder="Enter your email" name="email" id="email" required>
+            <span id="emailError" class="error"></span>
+        </div>
+        <div class="input-box">
+            <input type="text" placeholder="Enter your location" name="location" required>
+        </div>
+
+        <div class="input-box">
+            <input type="password" placeholder="Create password" name="password" id="password" required>
+            <span id="passwordError" class="error"></span>
+        </div>
+        <div class="input-box">
+            <input type="password" placeholder="Confirm password" name="confirmpassword" id="confirmpassword" required>
+            <span id="confirmpasswordError" class="error"></span>
+        </div>
+       
+        <div class="input-box button">
+            <input type="Submit" value="Register Now">
+        </div>
+        <div class="text">
+            <h3>Already have an account? <a href="/login">Login now</a></h3>
+        </div>
+    </form>
+    </div>
+     <script>
+        function validateForm() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmpassword = document.getElementById("confirmpassword").value;
+
+            const emailError = document.getElementById("emailError");
+            const passwordError = document.getElementById("passwordError");
+            const confirmpasswordError = document.getElementById("confirmpasswordError");
+
+            // Email validation using a simple regular expression
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                emailError.textContent = "Invalid email format";
+                return false;
+            } else {
+                emailError.textContent = "";
+            }
+
+            // Password validation - Add your password criteria here
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                passwordError.textContent = "Invalid password format";
+                return false;
+            } else {
+                passwordError.textContent = "";
+            }
+
+            if (password !== confirmpassword) {
+                confirmpasswordError.textContent = "Passwords do not match";
+                return false;
+            } else {
+                confirmpasswordError.textContent = "";
+            }
+
+            return true; // Form will be submitted if all validations pass
+        }
+    </script>
+</body>
+</html>
