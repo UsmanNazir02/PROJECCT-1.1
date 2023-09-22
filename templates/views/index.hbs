@@ -1,112 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-/* Reset some default styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* Basic styles for the body */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-    margin: 0;
-    padding: 0;
-}
+        /* Basic styles for the body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
 
-/* Container styles */
-.container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+        /* Container styles */
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-/* Header styles */
-header {
-    background-color: #007BFF;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-}
+        /* Header styles */
+        header {
+            background-color: #007BFF;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
 
-header h1 {
-    margin: 0;
-}
+        header h1 {
+            margin: 0;
+        }
 
-/* Navigation styles */
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
+        /* Navigation styles */
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
 
-nav ul li {
-    display: inline;
-    margin-right: 20px;
-}
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
 
-nav ul li a {
-    text-decoration: none;
-    color: #fff;
-}
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+        }
 
-/* Form styles */
-.form-group {
-    margin-bottom: 20px;
-}
+        /* Form styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-label {
-    font-weight: bold;
-    display: block;
-}
+        label {
+            font-weight: bold;
+            display: block;
+        }
 
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
 
-button {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-}
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
 
-button:hover {
-    background-color: #0056b3;
-}
+        button:hover {
+            background-color: #0056b3;
+        }
 
-/* Link styles */
-a {
-    text-decoration: none;
-    color: #007BFF;
-}
+        /* Link styles */
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
 
-a:hover {
-    text-decoration: underline;
-}
-</style>
+        a:hover {
+            text-decoration: underline;
+        }
+
+
+
+        /* Add these styles to your existing CSS */
+        .flash-container {
+            position: absolute;
+            top: 50px;
+            /* Adjust the top position as needed */
+            left: 50%;
+            /* Center horizontally */
+            transform: translateX(-50%);
+            /* Center horizontally */
+            width: 100%;
+            text-align: center;
+        }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .alert.alert-success {
+            background-color: #007bff;
+            /* Blue color for success messages */
+            color: #ffffff;
+            margin-top: 30px;
+            /* White text color */
+        }
+
+        .alert.alert-danger {
+            background-color: #dc3545;
+            /* Red color for error messages */
+            color: #ffffff;
+
+        }
+        p
+        {
+            margin-top: 48px;
+
+        }
+    </style>
 </head>
+
 <body>
     <header>
         <h1>Welcome to our Website</h1>
@@ -117,8 +161,22 @@ a:hover {
             </ul>
         </nav>
     </header>
+    <div class="flash-container">
+        {{#if messages.success}}
+        <div class="alert alert-success">
+            {{messages.success}}
+        </div>
+        {{/if}}
+
+        {{#if messages.error}}
+        <div class="alert alert-danger">
+            {{messages.error}}
+        </div>
+        {{/if}}
+    </div>
     <main>
         <p>This is the home page content.</p>
     </main>
 </body>
+
 </html>

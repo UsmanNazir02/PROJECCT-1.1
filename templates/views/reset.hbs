@@ -120,6 +120,45 @@
         form .text h3 a:hover {
             text-decoration: underline;
         }
+
+         .flash-container {
+            position: absolute;
+            top: 50px;
+            /* Adjust the top position as needed */
+            left: 50%;
+            /* Center horizontally */
+            transform: translateX(-50%);
+            /* Center horizontally */
+            width: 100%;
+            text-align: center;
+        }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .alert.alert-success {
+            background-color: #007bff;
+            /* Blue color for success messages */
+            color: #ffffff;
+            margin-top: 30px;
+            /* White text color */
+        }
+
+        .alert.alert-danger {
+            background-color: #dc3545;
+            /* Red color for error messages */
+            color: #ffffff;
+
+        }
+        p
+        {
+            margin-top: 48px;
+
+        }
     </style>
 </head>
 
@@ -130,10 +169,22 @@
         <a href="/register" style="font-size: larger;">Registration</a>
     </nav>
 
+    <div class="flash-container">
+        {{#if messages.success}}
+        <div class="alert alert-success">
+            {{messages.success}}
+        </div>
+        {{/if}}
+
+        {{#if messages.error}}
+        <div class="alert alert-danger">
+            {{messages.error}}
+        </div>
+        {{/if}}
+    </div>
 
 
-    
-      <div class="wrapper">
+    <div class="wrapper">
         <h2>Reset Password</h2>
 
         <form action="/reset" method="POST">
@@ -149,7 +200,7 @@
     </div>
 
 
-      <script>
+    <script>
         const alertMessage = "{{ alertMessage }}";
 
         if (alertMessage) {

@@ -103,9 +103,9 @@
             background: #4070f4;
             cursor: pointer;
             margin-left: 12px;
-            
+
         }
-        
+
 
         .input-box.button input:hover {
             background: #0e4bf1;
@@ -125,7 +125,43 @@
         form .text h3 a:hover {
             text-decoration: underline;
         }
-        .input-box
+
+       
+
+
+              /* Add these styles to your existing CSS */
+        .flash-container {
+            position: absolute;
+            top: 50px;
+            /* Adjust the top position as needed */
+            left: 50%;
+            /* Center horizontally */
+            transform: translateX(-50%);
+            /* Center horizontally */
+            width: 100%;
+            text-align: center;
+        }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .alert.alert-success {
+            background-color: #007bff;
+            /* Blue color for success messages */
+            color: #ffffff;
+            /* White text color */
+        }
+
+        .alert.alert-danger {
+            background-color: #dc3545;
+            /* Red color for error messages */
+            color: #ffffff;
+            
+        }
     </style>
 </head>
 
@@ -135,26 +171,40 @@
         <a href="/" style="font-size: larger;">Home</a>
         <a href="/register" style="font-size: larger;">Registration</a>
     </nav>
-   <div class="wrapper">
-    <h2>Reset Password</h2>
-    <form action="/verify-otp" method="POST">
-        <div class="input-box">
-            <input type="email" name="email" value="{{email}}" readonly>
+
+    <div class="flash-container">
+        {{#if messages.success}}
+        <div class="alert alert-success">
+            {{messages.success}}
         </div>
-        <div class="input-box">
-            <input type="text" name="otp" placeholder="Enter OTP" required>
+        {{/if}}
+
+        {{#if messages.error}}
+        <div class="alert alert-danger">
+            {{messages.error}}
         </div>
-        <div class="input-box">
-            <input type="password" name="newPassword" placeholder="Enter New Password" required>
-        </div>
-        <div class="input-box">
-            <input type="password" name="confirmNewPassword" placeholder="Confirm New Password" required>
-        </div>
-        <div class="input-box button">
-            <input type="Submit">
-        </div>
-    </form>
-</div>
+        {{/if}}
+    </div>
+    <div class="wrapper">
+        <h2>Reset Password</h2>
+        <form action="/verify-otp" method="POST">
+            <div class="input-box">
+                <input type="email" name="email" value="{{email}}" readonly>
+            </div>
+            <div class="input-box">
+                <input type="text" name="otp" placeholder="Enter OTP" required>
+            </div>
+            <div class="input-box">
+                <input type="password" name="newPassword" placeholder="Enter New Password" required>
+            </div>
+            <div class="input-box">
+                <input type="password" name="confirmNewPassword" placeholder="Confirm New Password" required>
+            </div>
+            <div class="input-box button">
+                <input type="Submit">
+            </div>
+        </form>
+    </div>
 
 </body>
 
