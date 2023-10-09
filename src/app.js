@@ -8,9 +8,10 @@ const flash = require("express-flash");
 require("./db/conn");
 const Register = require("./models/registers");
 const OTP = require("./models/otp");
-const { json } = require("express");
-const async = require("hbs/lib/async");
-const { Console } = require("console");
+const { stat } = require("fs");
+//const { json } = require("express");
+//const async = require("hbs/lib/async");
+//const { Console } = require("console");
 
 const port = process.env.PORT || 3000
 
@@ -38,9 +39,11 @@ app.set("view engine", "hbs")
 app.set("views", template_path)
 hbs.registerPartials(partials_path);
 
-app.get("/index", (req, res) => {
-    const data = "Login Successful"
-    res.render("index", {data : data})
+app.get("/", (req, res) => {
+    // const data = "Login Successful"
+    //  res.render("index", {data : data})
+    // res.json({ data: data });
+    res.render("index.hbs")
 })
 
 app.get("/register", (req, res) => {
@@ -49,6 +52,7 @@ app.get("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
     res.render("login.hbs");
+    // res.json({ message: "Login endpoint" });
 })
 
 app.get("/reset", (req, res) => {
@@ -73,8 +77,9 @@ app.post("/register", async (req, res) => {
             const existingUser = await Register.findOne({ email: req.body.email });
 
             if (existingUser) {
-                req.flash("error", "Email Already Exists");
-        return res.redirect("/register");
+                //req.flash("error", "Email Already Exists");
+                return res.status(201).send({ status: false, msg: 'Email Already Exist' })
+                // return res.redirect("/register");
             }
 
 
@@ -87,14 +92,16 @@ app.post("/register", async (req, res) => {
             });
 
             const registered = await registerPerson.save();
-            req.flash("success", "Registration Successful");
-            return res.render("login");
+            //req.flash("success", "Registration Successful");
+            return res.status(200).send({ status: true, msg: 'Registration Successful' })
+            // res.render("login");
         } else {
-            req.flash("error", "Password Is Not Matching");
-            req.flash("success", "Login Successful");
+            return res.status(201).send({ status: false, msg: 'Password Not matching' })
+            //req.flash("error", "Password Is Not Matching");
+            //req.flash("success", "Login Successful");
         }
     } catch (error) {
-        res.status(500).send("Internal Server Error");
+        return res.status(500).send("Internal Server Error");
     }
 });
 
@@ -108,12 +115,16 @@ app.post("/login", async (req, res) => {
         const useremail = await Register.findOne({ email: email });
 
         if (useremail.password === password) {
-            req.flash("success", "Login Successful");
-            return res.render("index");
-           
+            //req.flash("success", "Login Successful");
+            // return res.render("index");
+            return res.status(200).json({ status: true, email: req.body.email });
+
+
         } else {
-            req.flash("error", "Invalid Email Or Password");
-            return res.redirect("/login");
+
+            // req.flash("error", "Invalid Email Or Password");
+            return res.status(201).json({ status: false, email: req.body.email });
+            // return res.redirect("/login");
         }
     } catch (error) {
         req.flash("error", "Invalid Email Or Password");
@@ -130,10 +141,10 @@ app.post("/reset", async (req, res) => {
         const existingUser = await Register.findOne({ email: email });
 
         if (!existingUser) {
-           // return res.status(400).json({ error: "Invalid Email" });
-            req.flash("error", "Invalid Email");
-            return res.redirect("/reset");
-          
+            return res.status(201).json({ status: false, msg: 'Invalid Email' });
+            // req.flash("error", "Invalid Email");
+            //return res.redirect("/reset");
+
         }
 
         // Check if the email exists in the OTP database
@@ -146,9 +157,10 @@ app.post("/reset", async (req, res) => {
             await existingOtp.save();
 
             // Redirect to the verify-otp route indicating OTP creation/update success
-            req.flash("success", "OTP Sent");
-           // return res.redirect("/verify-otp");
-            return res.redirect(`/verify-otp?email=${encodeURIComponent(email)}`);
+            //req.flash("success", "OTP Sent");
+            // return res.redirect("/verify-otp");
+            res.status(200).send({status: true, msg: 'OTP Sent'})
+            //return res.redirect(`/verify-otp?email=${encodeURIComponent(email)}`);
         } else {
             // If OTP document doesn't exist, create a new OTP
             let otpcode = Math.floor(1000 + Math.random() * 9000);
@@ -162,10 +174,11 @@ app.post("/reset", async (req, res) => {
             await otpData.save();
 
             // Redirect to the verify-otp route indicating OTP creation/update success
-            req.flash("success", "OTP Sent");
-            return res.redirect(`/verify-otp?email=${encodeURIComponent(email)}`);
-            
-           
+            //req.flash("success", "OTP Sent");
+            //return res.redirect(`/verify-otp?email=${encodeURIComponent(email)}`);
+            res.status(200).send({status: true, msg: 'OTP Sent'})
+
+
         }
     } catch (error) {
         console.error(`Database Error: ${error}`);
@@ -179,34 +192,38 @@ app.post("/verify-otp", async (req, res) => {
         const newPassword = req.body.newPassword;
         const confirmNewPassword = req.body.confirmNewPassword;
         const email = req.body.email; // Retrieve email from the form data
-        
+
 
         // Check if the OTP exists and is valid
         const existingOtp = await OTP.findOne({ email: email });
 
         if (!existingOtp || existingOtp.code !== otp || existingOtp.expireIn < Date.now()) {
-            req.flash("error", "Invalid Or Expired OTP");
-            return res.redirect("/verify-otp");
-           
+            // req.flash("error", "Invalid Or Expired OTP");
+            // return res.redirect("/verify-otp");
+           return res.status(201).send({status: false, msg: 'Invalid or Expired OTP'})
+
         }
 
         // Check if the new password and confirm password match
         if (newPassword !== confirmNewPassword) {
-            req.flash("error", "Password And Confirm Password Do Not Match");
-            return res.redirect("/verify-otp");
-           
+            // req.flash("error", "Password And Confirm Password Do Not Match");
+            // return res.redirect("/verify-otp");
+            return res.status(201).send({status: false, msg: 'Password And Confirm Password Do Not Match'})
+
         }
 
         // Update the user's password in the database
         const user = await Register.findOne({ email: email });
         user.password = newPassword;
+        user.confirmpassword=confirmNewPassword
         await user.save();
-        mailer(email,otp);
+        mailer(email, otp);
 
         // Password updated successfully
-        req.flash("success", "Password Updated");
-        return res.redirect("/login");
-       
+        // req.flash("success", "Password Updated");
+        // return res.redirect("/login");
+        return res.status(200).send({status: true, msg: 'Password Updated'})
+
     } catch (error) {
         console.error(`Error in /verify-otp: ${error}`);
         const email = req.body.email;
