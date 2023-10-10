@@ -1,6 +1,3 @@
-
-
-
 const emailSend = async (req,res)=>{
     res.status(200).json("Ok")
     console.log("emailSend")
